@@ -17,19 +17,6 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     
     var isMoreDataLoading: Bool = false
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (!isMoreDataLoading) {
-            // Calculate the position of one screen length before the bottom of the results
-            let scrollViewContentHeight = moviesTableView.contentSize.height
-            let scrollOffsetThreshold = scrollViewContentHeight - moviesTableView.bounds.size.height
-            
-            // When the user has scrolled past the threshold, start requesting
-            if(scrollView.contentOffset.y > scrollOffsetThreshold && moviesTableView.isDragging) {
-                isMoreDataLoading = true
-                loadMoreData()
-            }
-        }
-    }
     
     func loadMoreData() {
         let url = URL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
@@ -76,18 +63,21 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         
         return cell
     }
+    
+    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        loadMoreData()
+        refreshControl.endRefreshing()
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
         loadMoreData()
-        let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        let loadingView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        loadingView.startAnimating()
-        loadingView.center = tableFooterView.center
-        tableFooterView.addSubview(loadingView)
-        self.moviesTableView.tableFooterView = tableFooterView
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        moviesTableView.insertSubview(refreshControl, at: 0)
     }
 
     override func didReceiveMemoryWarning() {
