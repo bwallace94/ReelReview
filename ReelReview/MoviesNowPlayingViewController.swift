@@ -68,6 +68,31 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         loadMoreData()
         refreshControl.endRefreshing()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! MovieDetailsViewController
+        let indexPath = moviesTableView.indexPath(for: sender as! MovieCell)!
+        let movie = movies[indexPath.row]
+        if let poster_path = movie.value(forKey: "poster_path") as? String {
+            let imageUrlString = "https://image.tmdb.org/t/p/w342\(poster_path)"
+            if let imageUrl = URL(string: imageUrlString) {
+                vc.posterUrl = imageUrl
+            }
+        }
+        if let title = movie.value(forKey: "original_title") as? String {
+            vc.movieTitle = title
+        }
+        if let release = movie.value(forKey: "release_date") as? String {
+            vc.releaseDate = release
+        }
+        if let review = movie.value(forKey: "vote_average") as? Double {
+            vc.review = review
+        }
+        // GET MOVIE LENGTH
+        if let overview = movie.value(forKey: "overview") as? String {
+            vc.movieOverview = overview
+        }
+    }
 
 
     override func viewDidLoad() {
