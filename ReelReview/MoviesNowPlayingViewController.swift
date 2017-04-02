@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -26,6 +27,7 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
             delegate:nil,
             delegateQueue:OperationQueue.main
         )
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         let task : URLSessionDataTask = session.dataTask(
             with: request as URLRequest,
             completionHandler: { (data, response, error) in
@@ -37,6 +39,7 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
                         self.movies += responseFieldDictionary
                         self.moviesTableView.reloadData()
                     }
+                MBProgressHUD.hide(for: self.view, animated: true)
                 }
         })
         task.resume()
@@ -62,6 +65,10 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         }
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
     }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {

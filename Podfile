@@ -7,5 +7,6 @@ target 'ReelReview' do
 
   # Pods for ReelReview
   pod 'AFNetworking', '~> 3.0'
+  pod 'MBProgressHUD'
 
 end
