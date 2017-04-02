@@ -14,6 +14,8 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     
     var movies: [NSDictionary] = []
     
+    @IBOutlet weak var networkErrorView: UIView!
+    
     @IBOutlet weak var moviesTableView: UITableView!
     
     var isMoreDataLoading: Bool = false
@@ -22,8 +24,11 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     func loadMoreData() {
         let url = URL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
         let request = URLRequest(url: url!)
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 3.0
+        sessionConfig.timeoutIntervalForResource = 3.0
         let session = URLSession(
-            configuration: URLSessionConfiguration.default,
+            configuration: sessionConfig,
             delegate:nil,
             delegateQueue:OperationQueue.main
         )
@@ -39,8 +44,15 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
                         self.movies += responseFieldDictionary
                         self.moviesTableView.reloadData()
                     }
-                MBProgressHUD.hide(for: self.view, animated: true)
                 }
+                MBProgressHUD.hide(for: self.view, animated: true)
+                if self.movies.isEmpty {
+                    self.networkErrorView.isHidden = false
+                }
+                else {
+                    self.networkErrorView.isHidden = true
+                }
+
         })
         task.resume()
     }
