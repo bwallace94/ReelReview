@@ -20,6 +20,10 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     
     var isMoreDataLoading: Bool = false
     
+    var searchController: UISearchController = UISearchController()
+    
+    var filteredMovies: [NSDictionary] = []
+    
     var endpoint = ""
     
     func loadMoreData() {
@@ -60,12 +64,18 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return self.filteredMovies.count
+        }
         return self.movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Movie Cell") as! MovieCell
-        let movie = movies[indexPath.row]
+        var movie = movies[indexPath.row]
+        if searchController.isActive && searchController.searchBar.text != "" {
+            movie = self.filteredMovies[indexPath.row]
+        }
         if let poster_path = movie.value(forKey: "poster_path") as? String {
             let imageUrlString = "https://image.tmdb.org/t/p/w342\(poster_path)"
             let imageRequest = NSURLRequest(url: URL(string: imageUrlString)!)
@@ -127,7 +137,7 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         if let poster_path = movie.value(forKey: "poster_path") as? String {
             vc.poster_url = poster_path
         }
-        if let title = movie.value(forKey: "original_title") as? String {
+        if let title = movie.value(forKey: "originaln_title") as? String {
             vc.movieTitle = title
         }
         if let release = movie.value(forKey: "release_date") as? String {
@@ -151,11 +161,36 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         moviesTableView.insertSubview(refreshControl, at: 0)
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search movies"
+        searchController.hidesNavigationBarDuringPresentation = false
+        moviesTableView.tableHeaderView = searchController.searchBar
+    }
+    
+    func filterContentForSearchText(_ searchText: String) {
+        self.filteredMovies = self.movies.filter({(movie) -> Bool in
+            let movieTitle = movie.value(forKey: "original_title") as! String
+            return movieTitle.lowercased().contains(searchText.lowercased())
+        })
+        moviesTableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
+}
 
+extension MoviesNowPlayingViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchBar.text!)
+    }
+}
+
+extension MoviesNowPlayingViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
 }
