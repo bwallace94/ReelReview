@@ -22,7 +22,6 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     
     var endpoint = ""
     
-    
     func loadMoreData() {
         let url_string = "https://api.themoviedb.org/3/movie/\(self.endpoint)?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string:url_string)
@@ -69,7 +68,24 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         let movie = movies[indexPath.row]
         if let poster_path = movie.value(forKey: "poster_path") as? String {
             let imageUrlString = "https://image.tmdb.org/t/p/w342\(poster_path)"
-            cell.movieImageView.setImageWith(URL(string: imageUrlString)!)
+            let imageRequest = NSURLRequest(url: URL(string: imageUrlString)!)
+            cell.movieImageView.setImageWith(
+                imageRequest as URLRequest,
+                placeholderImage: nil,
+                success: { (imageRequest, imageResponse, image) -> Void in
+                    if imageResponse != nil {
+                        cell.movieImageView.alpha = 0.0
+                        cell.movieImageView.image = image
+                        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                            cell.movieImageView.alpha = 1.0
+                        })
+                    } else {
+                        cell.movieImageView.image = image
+                    }
+            },
+                failure: { (imageRequest, imageResponse, error) -> Void in
+                    // do something for the failure condition
+            })
         }
         if let movie_title = movie.value(forKey: "title") as? String {
             cell.movieTitleLabel.text = movie_title
