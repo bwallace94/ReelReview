@@ -26,9 +26,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] Add splash screen.
 - [X] Add app icon.
-- [ ] More visually appealing UI.
 
 ## Video Walkthrough
 
