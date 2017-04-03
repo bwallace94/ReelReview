@@ -94,7 +94,7 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
             cell.movieDetailsLabel.text = movie_details
             cell.movieDetailsLabel.sizeToFit()
         }
-        
+        cell.selectionStyle = .none
         return cell
     }
     
