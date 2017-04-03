@@ -39,7 +39,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Got a warning that says: [Warning] Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior. This sometimes causes the app to just go black (without throwing any sort of error).
 
 ## License
 
