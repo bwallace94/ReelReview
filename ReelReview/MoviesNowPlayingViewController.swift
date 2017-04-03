@@ -109,10 +109,7 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         let indexPath = moviesTableView.indexPath(for: sender as! MovieCell)!
         let movie = movies[indexPath.row]
         if let poster_path = movie.value(forKey: "poster_path") as? String {
-            let imageUrlString = "https://image.tmdb.org/t/p/w342\(poster_path)"
-            if let imageUrl = URL(string: imageUrlString) {
-                vc.posterUrl = imageUrl
-            }
+            vc.poster_url = poster_path
         }
         if let title = movie.value(forKey: "original_title") as? String {
             vc.movieTitle = title
