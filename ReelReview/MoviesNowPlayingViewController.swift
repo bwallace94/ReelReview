@@ -20,7 +20,7 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     
     var isMoreDataLoading: Bool = false
     
-    var searchController: UISearchController = UISearchController()
+    var searchController: UISearchController!
     
     var filteredMovies: [NSDictionary] = []
     
@@ -133,11 +133,14 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! MovieDetailsViewController
         let indexPath = moviesTableView.indexPath(for: sender as! MovieCell)!
-        let movie = movies[indexPath.row]
+        var movie = movies[indexPath.row]
+        if searchController.isActive && searchController.searchBar.text != "" {
+            movie = self.filteredMovies[indexPath.row]
+        }
         if let poster_path = movie.value(forKey: "poster_path") as? String {
             vc.poster_url = poster_path
         }
-        if let title = movie.value(forKey: "originaln_title") as? String {
+        if let title = movie.value(forKey: "original_title") as? String {
             vc.movieTitle = title
         }
         if let release = movie.value(forKey: "release_date") as? String {
