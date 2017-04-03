@@ -86,6 +86,19 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
         tableView.deselectRow(at: indexPath, animated:true)
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        headerView.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        
+        let profileView = UIImageView(frame: CGRect(x: 10, y: 10, width: 30, height: 30))
+        profileView.clipsToBounds = true
+        profileView.layer.cornerRadius = 15;
+        profileView.layer.borderColor = UIColor(white: 0.7, alpha: 0.8).cgColor
+        profileView.layer.borderWidth = 1;
+            
+        return headerView
+    }
+    
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
         loadMoreData()
         refreshControl.endRefreshing()
