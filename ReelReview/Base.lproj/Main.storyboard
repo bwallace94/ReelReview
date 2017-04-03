@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Movies Now Playing View Controller-->
+        <!--ReelReviews-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MoviesNowPlayingViewController" customModule="ReelReview" customModuleProvider="target" sceneMemberID="viewController">
@@ -79,9 +79,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="tXh-Db-2qR">
-                        <nil key="title"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="ReelReviews" id="tXh-Db-2qR"/>
                     <connections>
                         <outlet property="moviesTableView" destination="uvH-XY-U5D" id="05d-fA-33U"/>
                         <outlet property="networkErrorView" destination="ZXi-fM-bQB" id="gdc-wr-VDo"/>
@@ -89,7 +87,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="672.5" y="154.5"/>
+            <point key="canvasLocation" x="593" y="155"/>
         </scene>
         <!--Movie Details View Controller-->
         <scene sceneID="Sii-9g-Ydh">
@@ -166,7 +164,7 @@
         <!--Navigation Controller-->
         <scene sceneID="WpR-ck-cve">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ytG-FH-63P" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MoviesNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="ytG-FH-63P" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8w0-As-oH7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

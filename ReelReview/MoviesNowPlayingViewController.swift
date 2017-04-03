@@ -20,9 +20,12 @@ class MoviesNowPlayingViewController: UIViewController, UITableViewDataSource, U
     
     var isMoreDataLoading: Bool = false
     
+    var endpoint = ""
+    
     
     func loadMoreData() {
-        let url = URL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
+        let url_string = "https://api.themoviedb.org/3/movie/\(self.endpoint)?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = URL(string:url_string)
         let request = URLRequest(url: url!)
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 3.0
